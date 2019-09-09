@@ -4,15 +4,17 @@ import {
   PHOTOS_FETCH_RECEIVED,
   PHOTO_VIEW_REQUEST,
   PHOTO_VIEW_RECEIVED,
+  ADD_TO_FAVORITE,
   REQUEST_ERROR,
   PhotoActionTypes
-} from "./types";
+} from './types';
 
 const initialState: PhotoState = {
   loading: false,
   photos: [],
   selectedPhoto: null,
-  error: null
+  error: null,
+  favorites: []
 };
 
 export function photoReducer(
@@ -22,12 +24,20 @@ export function photoReducer(
   switch (action.type) {
     case PHOTOS_FETCH_REQUEST:
     case PHOTO_VIEW_REQUEST:
-      return { ...state, loading: true }
+      return { ...state, loading: true };
     case PHOTOS_FETCH_RECEIVED:
       return {
         ...state,
         loading: false,
         photos: [...action.payload.photos]
+      };
+    case ADD_TO_FAVORITE:
+      let tempFav = [...state.favorites];
+      tempFav.push({ ...action.payload });
+      return {
+        ...state,
+        loading: false,
+        favorites: tempFav
       };
     case PHOTO_VIEW_RECEIVED:
       return {
@@ -40,7 +50,7 @@ export function photoReducer(
         ...state,
         loading: false,
         error: action.payload.error
-      }
+      };
     default:
       return state;
   }

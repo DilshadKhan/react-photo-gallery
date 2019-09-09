@@ -4,10 +4,10 @@ import {
   PHOTOS_FETCH_RECEIVED,
   PHOTO_VIEW_REQUEST,
   PHOTO_VIEW_RECEIVED,
+  ADD_TO_FAVORITE,
   REQUEST_ERROR,
   PhotoActionTypes
-} from "./types";
-
+} from './types';
 
 export function requestFetchPhotos(): PhotoActionTypes {
   return {
@@ -23,6 +23,12 @@ export function receivedFetchPhotos(photos: Photo[]): PhotoActionTypes {
   };
 }
 
+export function addToFavorite(id: number, albumId: number): PhotoActionTypes {
+  return {
+    type: ADD_TO_FAVORITE,
+    payload: { id, albumId }
+  };
+}
 
 export function requestViewPhoto(id: number): PhotoActionTypes {
   return {
@@ -30,7 +36,6 @@ export function requestViewPhoto(id: number): PhotoActionTypes {
     payload: { id }
   };
 }
-
 
 export function receivedViewPhoto(photo: Photo): PhotoActionTypes {
   return {

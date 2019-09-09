@@ -10,15 +10,17 @@ export interface Photo {
 export interface PhotoState {
   loading: boolean;
   photos: Photo[];
-  selectedPhoto: Photo | null,
-  error: string | null
+  selectedPhoto: Photo | null;
+  error: string | null;
+  favorites: { id: number; albumId: number }[];
 }
 
-export const PHOTOS_FETCH_REQUEST = "photos/FETCH_REQUEST";
-export const PHOTOS_FETCH_RECEIVED = "photos/FETCH_RECEIVED";
-export const PHOTO_VIEW_REQUEST = "photos/VIEW_REQUEST";
-export const PHOTO_VIEW_RECEIVED = "photos/VIEW_RECEIVED";
-export const REQUEST_ERROR = "photos/ERROR";
+export const PHOTOS_FETCH_REQUEST = 'photos/FETCH_REQUEST';
+export const PHOTOS_FETCH_RECEIVED = 'photos/FETCH_RECEIVED';
+export const ADD_TO_FAVORITE = 'photos/ADD_TO_FAVORITE';
+export const PHOTO_VIEW_REQUEST = 'photos/VIEW_REQUEST';
+export const PHOTO_VIEW_RECEIVED = 'photos/VIEW_RECEIVED';
+export const REQUEST_ERROR = 'photos/ERROR';
 
 export interface RequestPhotosFetchAction extends Action {
   type: typeof PHOTOS_FETCH_REQUEST;
@@ -28,6 +30,11 @@ export interface RequestPhotosFetchAction extends Action {
 export interface ReceivedPhotosFetchAction extends Action {
   type: typeof PHOTOS_FETCH_RECEIVED;
   payload: { photos: Photo[] };
+}
+
+export interface AddToFavorite extends Action {
+  type: typeof ADD_TO_FAVORITE;
+  payload: { id: number; albumId: number };
 }
 
 export interface RequestPhotoViewAction extends Action {
@@ -45,4 +52,10 @@ export interface ErrorRequestAction extends Action {
   payload: { error: string };
 }
 
-export type PhotoActionTypes = RequestPhotosFetchAction | ReceivedPhotosFetchAction | RequestPhotoViewAction | ReceivedPhotoViewAction | ErrorRequestAction;
+export type PhotoActionTypes =
+  | RequestPhotosFetchAction
+  | ReceivedPhotosFetchAction
+  | AddToFavorite
+  | RequestPhotoViewAction
+  | ReceivedPhotoViewAction
+  | ErrorRequestAction;
