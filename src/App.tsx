@@ -5,7 +5,8 @@ import { PhotoState } from './redux/photos/types';
 import {
   requestFetchPhotos,
   addToFavorite,
-  requestViewPhoto
+  requestViewPhoto,
+  togglePhotosFilter
 } from './redux/photos/actions';
 import './App.css';
 import PhotoGallery from './components/PhotoGallery';
@@ -15,6 +16,7 @@ interface AppProps {
   requestFetchPhotos: typeof requestFetchPhotos;
   addToFavorite: typeof addToFavorite;
   requestViewPhoto: typeof requestViewPhoto;
+  togglePhotosFilter: typeof togglePhotosFilter;
 }
 
 class App extends React.Component<AppProps> {
@@ -23,7 +25,12 @@ class App extends React.Component<AppProps> {
     requestFetchPhotos();
   }
   render() {
-    const { photo, addToFavorite } = this.props;
+    const {
+      photo,
+      addToFavorite,
+      togglePhotosFilter,
+      requestFetchPhotos
+    } = this.props;
 
     return (
       <div>
@@ -31,6 +38,8 @@ class App extends React.Component<AppProps> {
           photo={photo}
           selectedFilter='all'
           addToFavorite={addToFavorite}
+          togglePhotosFilter={togglePhotosFilter}
+          requestFetchPhotos={requestFetchPhotos}
         />
       </div>
     );
@@ -43,5 +52,5 @@ const mapStateToProps = (state: AppState) => ({
 
 export default connect(
   mapStateToProps,
-  { requestFetchPhotos, addToFavorite, requestViewPhoto }
+  { requestFetchPhotos, addToFavorite, requestViewPhoto, togglePhotosFilter }
 )(App);

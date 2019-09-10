@@ -5,6 +5,7 @@ import {
   PHOTO_VIEW_REQUEST,
   PHOTO_VIEW_RECEIVED,
   ADD_TO_FAVORITE,
+  TOGGLE_PHOTOS_FILTER,
   REQUEST_ERROR,
   PhotoActionTypes
 } from './types';
@@ -27,6 +28,13 @@ export function addToFavorite(id: number, albumId: number): PhotoActionTypes {
   return {
     type: ADD_TO_FAVORITE,
     payload: { id, albumId }
+  };
+}
+
+export function togglePhotosFilter(value: string): PhotoActionTypes {
+  return {
+    type: TOGGLE_PHOTOS_FILTER,
+    payload: { value }
   };
 }
 

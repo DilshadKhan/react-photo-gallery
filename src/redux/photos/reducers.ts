@@ -5,8 +5,10 @@ import {
   PHOTO_VIEW_REQUEST,
   PHOTO_VIEW_RECEIVED,
   ADD_TO_FAVORITE,
+  TOGGLE_PHOTOS_FILTER,
   REQUEST_ERROR,
-  PhotoActionTypes
+  PhotoActionTypes,
+  Photo
 } from './types';
 
 const initialState: PhotoState = {
@@ -33,11 +35,35 @@ export function photoReducer(
       };
     case ADD_TO_FAVORITE:
       let tempFav = [...state.favorites];
-      tempFav.push({ ...action.payload });
+
+      const foundedIndex: number = tempFav.findIndex(
+        item => item.id === action.payload.id
+      );
+
+      if (foundedIndex === -1) {
+        tempFav.push({ ...action.payload });
+      } else {
+        tempFav.splice(foundedIndex, 1);
+      }
+
       return {
         ...state,
         loading: false,
         favorites: tempFav
+      };
+    case TOGGLE_PHOTOS_FILTER:
+      let tempFavorites = [...state.favorites];
+      let tempPhotos = [...state.photos];
+      const result = tempFavorites.map(item => {
+        const founded = tempPhotos.find(elem => elem.id === item.id);
+
+        return founded;
+      }) as Photo[];
+
+      return {
+        ...state,
+        loading: false,
+        photos: [...result]
       };
     case PHOTO_VIEW_RECEIVED:
       return {

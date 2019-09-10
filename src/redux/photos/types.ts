@@ -18,6 +18,7 @@ export interface PhotoState {
 export const PHOTOS_FETCH_REQUEST = 'photos/FETCH_REQUEST';
 export const PHOTOS_FETCH_RECEIVED = 'photos/FETCH_RECEIVED';
 export const ADD_TO_FAVORITE = 'photos/ADD_TO_FAVORITE';
+export const TOGGLE_PHOTOS_FILTER = 'photos/TOGGLE_PHOTOS_FILTER';
 export const PHOTO_VIEW_REQUEST = 'photos/VIEW_REQUEST';
 export const PHOTO_VIEW_RECEIVED = 'photos/VIEW_RECEIVED';
 export const REQUEST_ERROR = 'photos/ERROR';
@@ -35,6 +36,11 @@ export interface ReceivedPhotosFetchAction extends Action {
 export interface AddToFavorite extends Action {
   type: typeof ADD_TO_FAVORITE;
   payload: { id: number; albumId: number };
+}
+
+export interface TogglePhotosFilter extends Action {
+  type: typeof TOGGLE_PHOTOS_FILTER;
+  payload: { value: string };
 }
 
 export interface RequestPhotoViewAction extends Action {
@@ -56,6 +62,7 @@ export type PhotoActionTypes =
   | RequestPhotosFetchAction
   | ReceivedPhotosFetchAction
   | AddToFavorite
+  | TogglePhotosFilter
   | RequestPhotoViewAction
   | ReceivedPhotoViewAction
   | ErrorRequestAction;
