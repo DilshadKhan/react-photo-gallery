@@ -25,12 +25,7 @@ export function* fetchPhotos(action: RequestPhotosFetchAction) {
 }
 
 export function* favoritePhotos(action: AddToFavorite) {
-  let result = yield call(
-    setFavorite,
-    action.payload.id,
-    action.payload.albumId
-  );
-  console.log('result', result);
+  yield call(setFavorite, action.payload.id, action.payload.albumId);
 }
 
 export function* viewPhoto(action: RequestPhotoViewAction) {

@@ -13,12 +13,13 @@ export interface PhotoState {
   selectedPhoto: Photo | null;
   error: string | null;
   favorites: { id: number; albumId: number }[];
+  selectedFilter: string;
 }
 
 export const PHOTOS_FETCH_REQUEST = 'photos/FETCH_REQUEST';
 export const PHOTOS_FETCH_RECEIVED = 'photos/FETCH_RECEIVED';
 export const ADD_TO_FAVORITE = 'photos/ADD_TO_FAVORITE';
-export const TOGGLE_PHOTOS_FILTER = 'photos/TOGGLE_PHOTOS_FILTER';
+export const PHOTOS_VISIBILITY_FILTER = 'photos/PHOTOS_VISIBILITY_FILTER';
 export const PHOTO_VIEW_REQUEST = 'photos/VIEW_REQUEST';
 export const PHOTO_VIEW_RECEIVED = 'photos/VIEW_RECEIVED';
 export const REQUEST_ERROR = 'photos/ERROR';
@@ -38,8 +39,8 @@ export interface AddToFavorite extends Action {
   payload: { id: number; albumId: number };
 }
 
-export interface TogglePhotosFilter extends Action {
-  type: typeof TOGGLE_PHOTOS_FILTER;
+export interface PhotosVisibilityFilter extends Action {
+  type: typeof PHOTOS_VISIBILITY_FILTER;
   payload: { value: string };
 }
 
@@ -62,7 +63,7 @@ export type PhotoActionTypes =
   | RequestPhotosFetchAction
   | ReceivedPhotosFetchAction
   | AddToFavorite
-  | TogglePhotosFilter
+  | PhotosVisibilityFilter
   | RequestPhotoViewAction
   | ReceivedPhotoViewAction
   | ErrorRequestAction;

@@ -5,10 +5,9 @@ import {
   PHOTO_VIEW_REQUEST,
   PHOTO_VIEW_RECEIVED,
   ADD_TO_FAVORITE,
-  TOGGLE_PHOTOS_FILTER,
+  PHOTOS_VISIBILITY_FILTER,
   REQUEST_ERROR,
-  PhotoActionTypes,
-  Photo
+  PhotoActionTypes
 } from './types';
 
 const initialState: PhotoState = {
@@ -16,7 +15,8 @@ const initialState: PhotoState = {
   photos: [],
   selectedPhoto: null,
   error: null,
-  favorites: []
+  favorites: [],
+  selectedFilter: 'all'
 };
 
 export function photoReducer(
@@ -51,19 +51,11 @@ export function photoReducer(
         loading: false,
         favorites: tempFav
       };
-    case TOGGLE_PHOTOS_FILTER:
-      let tempFavorites = [...state.favorites];
-      let tempPhotos = [...state.photos];
-      const result = tempFavorites.map(item => {
-        const founded = tempPhotos.find(elem => elem.id === item.id);
-
-        return founded;
-      }) as Photo[];
-
+    case PHOTOS_VISIBILITY_FILTER:
       return {
         ...state,
         loading: false,
-        photos: [...result]
+        selectedFilter: action.payload.value
       };
     case PHOTO_VIEW_RECEIVED:
       return {

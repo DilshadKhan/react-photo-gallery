@@ -1,22 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AppState } from './redux/store';
-import { PhotoState } from './redux/photos/types';
+import { Photo } from './redux/photos/types';
 import {
   requestFetchPhotos,
   addToFavorite,
   requestViewPhoto,
-  togglePhotosFilter
+  photosVisibilityFilter
 } from './redux/photos/actions';
 import './App.css';
 import PhotoGallery from './components/PhotoGallery';
+import { getVisiblePhotos } from './selectors';
 
 interface AppProps {
-  photo: PhotoState;
+  photos: Photo[];
   requestFetchPhotos: typeof requestFetchPhotos;
   addToFavorite: typeof addToFavorite;
   requestViewPhoto: typeof requestViewPhoto;
-  togglePhotosFilter: typeof togglePhotosFilter;
+  photosVisibilityFilter: typeof photosVisibilityFilter;
+  favorites: Photo[];
+  loading: boolean;
 }
 
 class App extends React.Component<AppProps> {
@@ -26,31 +28,42 @@ class App extends React.Component<AppProps> {
   }
   render() {
     const {
-      photo,
+      photos,
       addToFavorite,
-      togglePhotosFilter,
-      requestFetchPhotos
+      photosVisibilityFilter,
+      requestFetchPhotos,
+      favorites,
+      loading
     } = this.props;
 
     return (
       <div>
         <PhotoGallery
-          photo={photo}
-          selectedFilter='all'
+          photos={photos}
+          favorites={favorites}
+          loading={loading}
           addToFavorite={addToFavorite}
-          togglePhotosFilter={togglePhotosFilter}
           requestFetchPhotos={requestFetchPhotos}
+          photosVisibilityFilter={photosVisibilityFilter}
         />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: AppState) => ({
-  photo: state.photo
+// @ts-ignore
+const mapStateToProps = state => ({
+  photos: getVisiblePhotos(state),
+  favorites: state.photo.favorites,
+  loading: state.photo.loading
 });
 
 export default connect(
   mapStateToProps,
-  { requestFetchPhotos, addToFavorite, requestViewPhoto, togglePhotosFilter }
+  {
+    requestFetchPhotos,
+    addToFavorite,
+    requestViewPhoto,
+    photosVisibilityFilter
+  }
 )(App);

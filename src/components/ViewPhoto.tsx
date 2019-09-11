@@ -1,9 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
-import { PhotoState } from '../redux/photos/types';
 
 interface PhotoProps {
-  photo: PhotoState;
   selectedPhoto: any;
 }
 

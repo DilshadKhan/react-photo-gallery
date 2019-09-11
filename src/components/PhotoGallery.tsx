@@ -1,19 +1,20 @@
 import React from 'react';
 import { List, Card, Layout, Icon, Modal, Col, Select } from 'antd';
-import { PhotoState } from '../redux/photos/types';
+import { Photo } from '../redux/photos/types';
 import {
   addToFavorite,
-  togglePhotosFilter,
-  requestFetchPhotos
+  requestFetchPhotos,
+  photosVisibilityFilter
 } from '../redux/photos/actions';
 
 import ViewPhoto from './ViewPhoto';
 
 interface PhotoProps {
-  photo: PhotoState;
-  selectedFilter: string;
+  photos: Photo[];
+  favorites: Photo[];
+  loading: boolean;
   addToFavorite: typeof addToFavorite;
-  togglePhotosFilter: typeof togglePhotosFilter;
+  photosVisibilityFilter: typeof photosVisibilityFilter;
   requestFetchPhotos: typeof requestFetchPhotos;
 }
 const { Header, Content } = Layout;
@@ -31,19 +32,12 @@ class PhotoGallery extends React.Component<PhotoProps> {
   };
 
   handleFilter = (value: string) => {
-    const { togglePhotosFilter, requestFetchPhotos } = this.props;
-
-    if (value === 'favorite') {
-      togglePhotosFilter(value);
-    } else {
-      requestFetchPhotos();
-    }
+    const { photosVisibilityFilter } = this.props;
+    photosVisibilityFilter(value);
   };
 
   showModal = (id: number) => {
-    const {
-      photo: { photos }
-    } = this.props;
+    const { photos } = this.props;
     const foundPhoto = photos.find(elem => {
       return elem.id === id;
     });
@@ -69,8 +63,8 @@ class PhotoGallery extends React.Component<PhotoProps> {
   };
 
   getFavoriteIcon = (id: number, albumId: number) => {
-    const { photo } = this.props;
-    const result = photo.favorites.filter(item => item.id === id);
+    const { favorites } = this.props;
+    const result = favorites.filter(item => item.id === id);
 
     if (result.length > 0) {
       return true;
@@ -80,7 +74,7 @@ class PhotoGallery extends React.Component<PhotoProps> {
   };
 
   render() {
-    const { photo } = this.props;
+    const { photos, loading } = this.props;
     const { modalVisible, selectedPhoto } = this.state;
 
     return (
@@ -114,9 +108,9 @@ class PhotoGallery extends React.Component<PhotoProps> {
                 },
                 pageSize: 12
               }}
-              loading={photo.loading}
+              loading={loading}
               style={{ top: '80px' }}
-              dataSource={photo.photos}
+              dataSource={photos}
               renderItem={item => (
                 <List.Item>
                   <Card
@@ -148,7 +142,7 @@ class PhotoGallery extends React.Component<PhotoProps> {
             footer={null}
             width={700}
           >
-            <ViewPhoto photo={photo} selectedPhoto={selectedPhoto}></ViewPhoto>
+            <ViewPhoto selectedPhoto={selectedPhoto}></ViewPhoto>
           </Modal>
         </Content>
       </Layout>
