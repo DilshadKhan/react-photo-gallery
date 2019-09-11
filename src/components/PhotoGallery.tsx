@@ -1,13 +1,9 @@
-import React from 'react';
-import { List, Card, Layout, Icon, Modal, Col, Select } from 'antd';
-import { Photo } from '../redux/photos/types';
-import {
-  addToFavorite,
-  requestFetchPhotos,
-  photosVisibilityFilter
-} from '../redux/photos/actions';
+import React from "react";
+import { List, Card, Layout, Icon, Modal, Col, Select } from "antd";
+import { Photo, Favorites } from "../redux/photos/types";
+import { addToFavorite, requestFetchPhotos, photosVisibilityFilter } from "../redux/photos/actions";
 
-import ViewPhoto from './ViewPhoto';
+import ViewPhoto from "./ViewPhoto";
 
 interface PhotoProps {
   photos: Photo[];
@@ -25,7 +21,7 @@ class PhotoGallery extends React.Component<PhotoProps> {
     selectedPhoto: {}
   };
 
-  handleFavorite = (e: any, item: { id: number; albumId: number }) => {
+  handleFavorite = (e: any, item: Favorites) => {
     e.stopPropagation();
     const { addToFavorite } = this.props;
     addToFavorite(item.id, item.albumId);
@@ -62,15 +58,13 @@ class PhotoGallery extends React.Component<PhotoProps> {
     });
   };
 
-  getFavoriteIcon = (id: number, albumId: number) => {
+  getFavoriteIcon = (id: number) => {
     const { favorites } = this.props;
     const result = favorites.filter(item => item.id === id);
-
     if (result.length > 0) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   };
 
   render() {
@@ -79,14 +73,12 @@ class PhotoGallery extends React.Component<PhotoProps> {
 
     return (
       <Layout>
-        <Header
-          style={{ position: 'fixed', zIndex: 1, width: '100%', color: '#fff' }}
-        >
+        <Header style={{ position: "fixed", zIndex: 1, width: "100%", color: "#fff" }}>
           <Col span={20}> Photo Gallery</Col>
           <Col span={4}>
-            <Select defaultValue='All Photos' onChange={this.handleFilter}>
-              <Option value='all'>All Photos</Option>
-              <Option value='favorite'>Favorite Photos</Option>
+            <Select defaultValue="All Photos" onChange={this.handleFilter}>
+              <Option value="all">All Photos</Option>
+              <Option value="favorite">Favorite Photos</Option>
             </Select>
           </Col>
         </Header>
@@ -109,23 +101,16 @@ class PhotoGallery extends React.Component<PhotoProps> {
                 pageSize: 12
               }}
               loading={loading}
-              style={{ top: '80px' }}
+              style={{ top: "80px" }}
               dataSource={photos}
               renderItem={item => (
                 <List.Item>
-                  <Card
-                    title={item.title}
-                    onClick={() => this.showModal(item.id)}
-                  >
+                  <Card title={item.title} onClick={() => this.showModal(item.id)}>
                     <img width={150} alt={item.title} src={item.thumbnailUrl} />
                     <div>
                       <Icon
-                        type='star'
-                        theme={
-                          this.getFavoriteIcon(item.id, item.albumId)
-                            ? 'filled'
-                            : 'outlined'
-                        }
+                        type="star"
+                        theme={this.getFavoriteIcon(item.id) ? "filled" : "outlined"}
                         key={item.id}
                         onClick={e => this.handleFavorite(e, item)}
                       />

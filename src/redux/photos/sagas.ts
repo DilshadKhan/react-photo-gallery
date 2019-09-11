@@ -1,4 +1,4 @@
-import { takeEvery, put, fork, call } from 'redux-saga/effects';
+import { takeEvery, put, fork, call } from "redux-saga/effects";
 import {
   RequestPhotosFetchAction,
   AddToFavorite,
@@ -6,17 +6,13 @@ import {
   PHOTOS_FETCH_REQUEST,
   PHOTO_VIEW_REQUEST,
   ADD_TO_FAVORITE
-} from './types';
-import {
-  receivedFetchPhotos,
-  receivedViewPhoto,
-  errorRequestPhoto
-} from './actions';
-import services from '../../services';
-import { setFavorite } from '../../utils/common';
+} from "./types";
+import { receivedFetchPhotos, receivedViewPhoto, errorRequestPhoto } from "./actions";
+import { get } from "../../services";
+import { setFavorite } from "../../utils/common";
 
 export function* fetchPhotos(action: RequestPhotosFetchAction) {
-  const response = yield call(services.get, '/photos', {});
+  const response = yield call(get, "/photos", {});
   if (response.success) {
     yield put(receivedFetchPhotos(response.data));
   } else {
@@ -29,7 +25,7 @@ export function* favoritePhotos(action: AddToFavorite) {
 }
 
 export function* viewPhoto(action: RequestPhotoViewAction) {
-  const response = yield call(services.get, `/photos/${action.payload.id}`, {});
+  const response = yield call(get, `/photos/${action.payload.id}`, {});
   if (response.success) {
     yield put(receivedViewPhoto(response.data));
   } else {

@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { API_URL } from '../config';
+import axios from "axios";
+import { API_URL } from "../config";
 
-async function get(url: string, config: object) {
+export async function get(url: string, config: object) {
   let result: { success: boolean; error?: string; data?: any };
   try {
     const response = await axios.get(`${API_URL}${url}`, { ...config });
@@ -11,7 +11,3 @@ async function get(url: string, config: object) {
   }
   return result;
 }
-
-export default {
-  get
-};
