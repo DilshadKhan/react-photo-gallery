@@ -1,0 +1,17 @@
+.mzh-gallery .photo-item {
+  position: relative;
+  cursor: pointer;
+}
+.mzh-gallery .photo-item .photo-item-img-ct {
+  height: 330px;
+}
+.mzh-gallery .photo-item .photo-item-favorite {
+  position: absolute;
+  top: 7px;
+  right: 15px;
+}
+.mzh-gallery .photo-item .photo-item-img-ct img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}

@@ -9,13 +9,15 @@ export const getVisiblePhotos = createSelector(
   (selectedFilter, photo, favorites) => {
     switch (selectedFilter) {
       case "all":
-        return photo.photos;
-      case "favorite":
-        const result = favorites.map(item => {
-          const founded = photo.photos.find(elem => elem.id === item.id);
-          return founded;
+        return photo.photos.map(photo => {
+          let favorite = false;
+          if (favorites.find(favItem => photo.id === favItem.id && photo.albumId === favItem.albumId)) {
+            favorite = true;
+          }
+          return { ...photo, favorite };
         });
-        return result;
+      case "favorite":
+        return [...photo.favorites];
       default:
         return photo.photos;
     }

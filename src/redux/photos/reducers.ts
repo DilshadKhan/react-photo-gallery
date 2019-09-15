@@ -8,7 +8,7 @@ import {
   PHOTOS_VISIBILITY_FILTER,
   REQUEST_ERROR,
   PhotoActionTypes,
-  Favorites
+  Photo
 } from "./types";
 
 const initialState: PhotoState = {
@@ -17,11 +17,16 @@ const initialState: PhotoState = {
   selectedPhoto: null,
   error: null,
   favorites: [],
-  selectedFilter: "all"
+  selectedFilter: "all",
+  pagination: {
+    total: 0,
+    page: 1,
+    pageSize: 12
+  }
 };
 
 const hydrateFavorites = () => {
-  const favorites: Favorites[] = JSON.parse(localStorage.getItem("favorite-photos") || "[]");
+  const favorites: Photo[] = JSON.parse(localStorage.getItem("favorite-photos") || "[]");
   return { ...initialState, favorites: favorites };
 };
 
@@ -34,20 +39,21 @@ export function photoReducer(state = hydrateFavorites(), action: PhotoActionType
       return {
         ...state,
         loading: false,
-        photos: [...action.payload.photos]
+        photos: [...action.payload.photos],
+        pagination: { ...action.payload.pagination }
       };
     case ADD_TO_FAVORITE:
-      let tempFav = [...state.favorites];
-      const foundedIndex: number = tempFav.findIndex(item => item.id === action.payload.id);
+      let favorites = [...state.favorites];
+      const foundedIndex: number = favorites.findIndex(item => item.id === action.payload.photo.id && item.albumId === action.payload.photo.albumId);
       if (foundedIndex === -1) {
-        tempFav.push({ ...action.payload });
+        favorites.push({ ...action.payload.photo, favorite: true });
       } else {
-        tempFav.splice(foundedIndex, 1);
+        favorites.splice(foundedIndex, 1);
       }
       return {
         ...state,
         loading: false,
-        favorites: tempFav
+        favorites: [...favorites]
       };
     case PHOTOS_VISIBILITY_FILTER:
       return {

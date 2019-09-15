@@ -1,15 +1,15 @@
-import { Favorites } from "../redux/photos/types";
+import { Photo } from "../redux/photos/types";
 
-export function setFavorite(id: number, albumId: number) {
-  let favoritePhotos = JSON.parse(localStorage.getItem("favorite-photos") || "[]");
-  let found = favoritePhotos.findIndex(
-    (item: Favorites) => item.id === id && item.albumId === albumId
+export function setFavorite(photo: Photo) {
+  let favorites = JSON.parse(localStorage.getItem("favorite-photos") || "[]");
+  let found = favorites.findIndex(
+    (item: Photo) => item.id === photo.id && item.albumId === photo.albumId
   );
   if (found === -1) {
-    favoritePhotos.push({ id, albumId });
+    favorites.push({ ...photo, favorite: true });
   } else {
-    favoritePhotos.splice(found, 1);
+    favorites.splice(found, 1);
   }
-  localStorage.setItem("favorite-photos", JSON.stringify(favoritePhotos));
+  localStorage.setItem("favorite-photos", JSON.stringify(favorites));
   return true;
 }

@@ -12,16 +12,24 @@ import { get } from "../../services";
 import { setFavorite } from "../../utils/common";
 
 export function* fetchPhotos(action: RequestPhotosFetchAction) {
-  const response = yield call(get, "/photos", {});
+  const payload = action.payload;
+  const limit = payload.pagination.pageSize;
+  let offset = payload.pagination.page - 1;
+  if (offset > 0) {
+    offset = offset + limit;
+  }
+  const response = yield call(get, "/photos", { params: { _start: offset, _limit: limit } });
   if (response.success) {
-    yield put(receivedFetchPhotos(response.data));
+    let pagination = { ...payload.pagination };
+    pagination.total = parseInt(response.headers['x-total-count'], 10);
+    yield put(receivedFetchPhotos(response.data, pagination));
   } else {
     yield put(errorRequestPhoto(response.error));
   }
 }
 
 export function* favoritePhotos(action: AddToFavorite) {
-  yield call(setFavorite, action.payload.id, action.payload.albumId);
+  yield call(setFavorite, action.payload.photo);
 }
 
 export function* viewPhoto(action: RequestPhotoViewAction) {

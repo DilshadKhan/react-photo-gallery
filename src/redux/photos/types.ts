@@ -5,21 +5,26 @@ export interface Photo {
   title: string;
   url: string;
   thumbnailUrl: string;
+  favorite: boolean
 }
+
+export interface Pagination {
+  total: number;
+  pageSize: number;
+  page: number
+}
+
 
 export interface PhotoState {
   loading: boolean;
   photos: Photo[];
   selectedPhoto: Photo | null;
   error: string | null;
-  favorites: { id: number; albumId: number }[];
+  favorites: Photo[];
   selectedFilter: string;
+  pagination: Pagination
 }
 
-export interface Favorites {
-  id: number;
-  albumId: number;
-}
 
 export const PHOTOS_FETCH_REQUEST = "photos/FETCH_REQUEST";
 export const PHOTOS_FETCH_RECEIVED = "photos/FETCH_RECEIVED";
@@ -31,17 +36,17 @@ export const REQUEST_ERROR = "photos/ERROR";
 
 export interface RequestPhotosFetchAction extends Action {
   type: typeof PHOTOS_FETCH_REQUEST;
-  payload: {};
+  payload: { pagination: Pagination };
 }
 
 export interface ReceivedPhotosFetchAction extends Action {
   type: typeof PHOTOS_FETCH_RECEIVED;
-  payload: { photos: Photo[] };
+  payload: { photos: Photo[], pagination: Pagination };
 }
 
 export interface AddToFavorite extends Action {
   type: typeof ADD_TO_FAVORITE;
-  payload: { id: number; albumId: number };
+  payload: { photo: Photo };
 }
 
 export interface PhotosVisibilityFilter extends Action {

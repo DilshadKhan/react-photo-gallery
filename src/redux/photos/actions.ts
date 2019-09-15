@@ -7,27 +7,28 @@ import {
   ADD_TO_FAVORITE,
   PHOTOS_VISIBILITY_FILTER,
   REQUEST_ERROR,
-  PhotoActionTypes
+  PhotoActionTypes,
+  Pagination
 } from './types';
 
-export function requestFetchPhotos(): PhotoActionTypes {
+export function requestFetchPhotos(pagination: Pagination): PhotoActionTypes {
   return {
     type: PHOTOS_FETCH_REQUEST,
-    payload: {}
+    payload: { pagination }
   };
 }
 
-export function receivedFetchPhotos(photos: Photo[]): PhotoActionTypes {
+export function receivedFetchPhotos(photos: Photo[], pagination: Pagination): PhotoActionTypes {
   return {
     type: PHOTOS_FETCH_RECEIVED,
-    payload: { photos }
+    payload: { photos, pagination }
   };
 }
 
-export function addToFavorite(id: number, albumId: number): PhotoActionTypes {
+export function addToFavorite(photo: Photo): PhotoActionTypes {
   return {
     type: ADD_TO_FAVORITE,
-    payload: { id, albumId }
+    payload: { photo }
   };
 }
 
